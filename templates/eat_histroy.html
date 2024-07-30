@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Записи о приемах пищи</title>
+<link rel="stylesheet" href="css\eat_history.css">
+</head>
+<body>
+<div class="container">
+    <h1>Записи о приемах пищи</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Время</th>
+                <th>Название блюда</th>
+                <th>Калории</th>
+            </tr>
+        </thead>
+        <tbody id="mealsBody">
+            <tr>
+                <td>01.01.2023</td>
+                <td>08:00</td>
+                <td>Овсяная каша</td>
+                <td>200</td>
+            </tr>
+            <tr>
+                <td>01.01.2023</td>
+                <td>13:00</td>
+                <td>Гречка с курицей</td>
+                <td>400</td>
+            </tr>
+            <tr>
+                <td>01.01.2023</td>
+                <td>19:00</td>
+                <td>Салат с тунцом</td>
+                <td>300</td>
+            </tr>
+            <!-- Дополнительные записи -->
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3">Общее суточное потребление калорий</td>
+                <td id="totalCalories">900</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script src=".\js\eat_history.js"></script>
+</body>
+</html>

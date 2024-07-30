@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор калорий</title>
+<link rel="stylesheet" href=".\css\calculator.css">
+</head>
+<body>
+<div class="calculator">
+    <h1>Калькулятор калорий</h1>
+    <label for="protein">Белки (г):</label>
+    <input type="number" id="protein" name="protein" required>
+    <label for="fat">Жиры (г):</label>
+    <input type="number" id="fat" name="fat" required>
+    <label for="carbs">Углеводы (г):</label>
+    <input type="number" id="carbs" name="carbs" required>
+    <button onclick="calculateCalories()">Рассчитать</button>
+    <p id="result"></p>
+</div>
+
+<script src=".\js\calculator.js"></script>
+</body>
+</html>

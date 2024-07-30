@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список продуктов</title>
+    <link rel="stylesheet" href="{% static 'css/products.css' %}"> <!-- Подключение CSS файла -->
+</head>
+<body>
+
+<h1>Список продуктов</h1>
+
+<label for="product-select">Выберите продукт:</label>
+<select id="product-select" onchange="showProductDetails()">
+    <option value="">--Выберите продукт--</option>
+    {% for p in products %}
+        <option value="{{ p.id }}">{{ p.name }} </option>
+    {% endfor %}
+</select>
+
+<div class="product-details" id="product-details" style="display: none;">
+    <h2>Детали продукта</h2>
+    <label>Название: <span id="product-name"></span></label>
+    <label>Калорийность: <span id="product-calories"></span> ккал</label>
+    <label>Содержание белка: <span id="product-protein"></span> г</label>
+    <label>Содержание жира: <span id="product-fat"></span> г</label>
+    <label>Содержание углеводов: <span id="product-carbs"></span> г</label>
+</div>
+<script src="{% static 'js/products.js' %}"></script> <!-- Подключение JS файла -->
+</body>
+</html>
+
+
