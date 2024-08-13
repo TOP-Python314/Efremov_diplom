@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Сохраненные блюда{% endblock %}
+{% block content %}
+
+<h1>Список сохраненных блюд</h1>
+<title>Сохраненные блюда</title>
+<link rel="stylesheet" href="{% static 'css/saved_dishes.css' %}">
+
+<div>
+    <div class="container">
+        <div class="column">
+            <h2>Добавленные блюда</h2>
+            {% for dish in added_dishes %}
+                <div class="dish-form" onclick="openDishDetails('{{ dish.id }}')">
+                    <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                    <div class="dish-details">
+                        <form>
+                            <label for="added-dish-name-{{ forloop.counter }}">Название блюда:</label>
+                            <input type="text" id="added-dish-name-{{ forloop.counter }}" value="{{ dish.name }}" readonly>
+                            <label for="added-dish-calories-{{ forloop.counter }}">Калории:</label>
+                            <input type="number" id="added-dish-calories-{{ forloop.counter }}" value="{{ dish.kcals }}" readonly>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+            <!-- Дополнительные блюда можно добавлять аналогичным образом -->
+        </div>
+        <div class="column">
+            <h2>Созданные блюда</h2>
+            {% for dish in created_dishes %}
+                <div class="dish-form" onclick="openDishDetails('{{ dish.id }}')">
+                    <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+                    <div class="dish-details">
+                        <form>
+                            <label for="created-dish-name-{{ forloop.counter }}">Название блюда:</label>
+                            <input type="text" id="created-dish-name-{{ forloop.counter }}" value="{{ dish.name }}" readonly>
+                            <label for="created-dish-calories-{{ forloop.counter }}">Калории:</label>
+                            <input type="number" id="created-dish-calories-{{ forloop.counter }}" value="{{ dish.kcals }}" readonly>
+                            <button type="button">Изменить</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Форма для создания нового блюда -->
+    <div class="create-dish-form">
+        <form action="created_dishes_view" method="POST" enctype="multipart/form-data">
+            <button type="submit">Создать блюдо</button>
+        </form>
+    </div>
+</div>
+
+<!-- Модальное окно для отображения рецепта и КБЖУ -->
+<div id="dishDetailsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDishDetails()">&times;</span>
+        <h2 id="dishName"></h2>
+        <p id="dishRecipe"></p>
+        <h3>КБЖУ:</h3>
+        <p id="dishKcal">Калории: </p>
+        <p id="dishProtein">Белки: </p>
+        <p id="dishFat">Жиры: </p>
+        <p id="dishCarbs">Углеводы: </p>
+    </div>
+</div>
+
+<script>
+    function openDishDetails(dish) {
+        let name, recipe, kcal, protein, fat, carbs;
+
+        if (dish === 'pasta') {
+            name = "Паста Карбонара";
+            recipe = "Смешайте спагетти с яичной смесью, добавьте сыр и бекон.";
+            kcal = "350";
+            protein = "12 г";
+            fat = "18 г";
+            carbs = "40 г";
+        } else if (dish === 'burger') {
+            name = "Фирменный бургер";
+            recipe = "Обжарьте котлету на гриле и соберите бургер с овощами.";
+            kcal = "450";
+            protein = "20 г";
+            fat = "25 г";
+            carbs = "30 г";
+        }
+
+        document.getElementById("dishName").innerText = name;
+        document.getElementById("dishRecipe").innerText = recipe;
+        document.getElementById("dishKcal").innerText = "Калории: " + kcal;
+        document.getElementById("dishProtein").innerText = "Белки: " + protein;
+        document.getElementById("dishFat").innerText = "Жиры: " + fat;
+        document.getElementById("dishCarbs").innerText = "Углеводы: " + carbs;
+
+        // Показываем модальное окно
+        document.getElementById("dishDetailsModal").style.display = "block";
+    }
+
+    function closeDishDetails() {
+        document.getElementById("dishDetailsModal").style.display = "none";
+    }
+
+    // Закрытие модального окна при нажатии вне его
+    window.onclick = function(event) {
+        const modal = document.getElementById("dishDetailsModal");
+        if (event.target == modal) {
+            closeDishDetails();
+        }
+    }
+</script>
+
+{% endblock %}

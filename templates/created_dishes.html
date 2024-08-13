@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Сохраненные блюда{% endblock %}
+{% block content %}
+
+    <h1>Создать Блюдо</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="name">Название блюда:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="image">Изображение:</label>
+            
+        </div>
+        <div>
+            <label for="proteins">Белки (г):</label>
+            <input type="number" id="proteins" name="proteins" required>
+        </div>
+        <div>
+            <label for="fats">Жиры (г):</label>
+            <input type="number" id="fats" name="fats" required>
+        </div>
+        <div>
+            <label for="carbs">Углеводы (г):</label>
+            <input type="number" id="carbs" name="carbs" required>
+        </div>
+        <div>
+            <label for="kcals">Калории:</label>
+            <input type="number" id="kcals" name="kcals" required>
+        </div>
+        <div>
+            <label for="areas">Область:</label>
+            <input type="text" id="areas" name="areas" required>
+        </div>
+        <div>
+            <label for="categorys">Категория:</label>
+            <input type="text" id="categorys" name="categorys" required>
+        </div>
+        <div>
+            <label for="recipes">Рецепт:</label>
+            <textarea id="recipes" name="recipes" rows="4" required></textarea>
+        </div>
+        <button type="submit">Создать Блюдо</button>
+    </form>
+    <a href="saved_dishes">Назад к сохранённым блюдам</a>
+ {% endblock %}

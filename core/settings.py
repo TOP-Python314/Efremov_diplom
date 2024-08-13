@@ -15,8 +15,15 @@ DEBUG = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
+    BASE_DIR / "static",
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = [
+    BASE_DIR / 'media',
+]
+
+
 ALLOWED_HOSTS = []
 WSGI_APPLICATION = 'core.wsgi.application'
 ROOT_URLCONF = 'core.urls'
@@ -27,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'catalog.apps.CatalogConfig',
     'django.contrib.staticfiles',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Продукты{% endblock %}
+{% block content %}
+
+
+<title>Профиль пользователя</title>
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<div class="profile-container">
+    <div class="profile-header">
+        <img src="{{ user.profile_image_url }}" alt="Фото профиля">
+        <div>
+            <h2>{{ user.full_name }}</h2>
+            <p>{{ user.email }}</p>
+        </div>
+    </div>
+
+    <div class="profile-details">
+        <h3>О себе</h3>
+        <p>{{ user.bio }}</p>
+
+        <h3>Дополнительная информация</h3>
+        <p><strong>Возраст:</strong> {{ user.age }}</p>
+        <p><strong>Город:</strong> {{ user.city }}</p>
+        <p><strong>Страна:</strong> {{ user.country }}</p>
+    </div>
+
+    <button onclick="toggleEditForm()">Редактировать профиль</button>
+     <!-- Кнопка перехода на страницу с сохраненными блюдами -->
+    <div class="saved-dishes-button">
+        <a href="saved_dishes" class="button">Перейти к сохраненным блюдам</a>
+    </div>
+    <!-- Форма редактирования профиля -->
+    <div class="edit-form" id="editForm">
+        <h3>Редактировать профиль</h3>
+        <form id="profileEditForm" onsubmit="saveProfile(event)">
+            <label for="fullName">Полное имя:</label>
+            <input type="text" id="fullName" name="fullName" value="{{ user.full_name }}">
+
+            <label for="email">Электронная почта:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}">
+
+            <label for="bio">О себе:</label>
+            <textarea id="bio" name="bio">{{ user.bio }}</textarea>
+
+                        <label for="age">Возраст:</label>
+            <input type="number" id="age" name="age" value="{{ user.age }}">
+
+            <label for="city">Город:</label>
+            <input type="text" id="city" name="city" value="{{ user.city }}">
+
+            <label for="country">Страна:</label>
+            <input type="text" id="country" name="country" value="{{ user.country }}">
+
+            <button type="submit">Сохранить изменения</button>
+            <button type="button" onclick="toggleEditForm()">Отмена</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleEditForm() {
+        const editForm = document.getElementById('editForm');
+        editForm.style.display = editForm.style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function saveProfile(event) {
+        event.preventDefault(); // Отменить стандартное поведение формы
+
+        // Получение значений из формы
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('email').value;
+        const bio = document.getElementById('bio').value;
+        const age = document.getElementById('age').value;
+        const city = document.getElementById('city').value;
+        const country = document.getElementById('country').value;
+
+        // Здесь вы можете добавить код для отправки данных на сервер (например, через AJAX)
+        console.log('Сохранённые данные:', { fullName, email, bio, age, city, country });
+
+        // Закрыть форму после сохранения
+        toggleEditForm();
+
+        // Обновление отображаемой информации на странице (предполагается, что у вас есть такие элементы)
+        // Например:
+        // document.querySelector('.profile-header h2').textContent = fullName;
+        // document.querySelector('.profile-header p').textContent = email;
+        // document.querySelector('.profile-details p').textContent = bio;
+        // document.querySelector('.profile-details p:nth-child(4)').textContent = `Возраст: ${age}`;
+        // document.querySelector('.profile-details p:nth-child(5)').textContent = `Город: ${city}`;
+        // document.querySelector('.profile-details p:nth-child(6)').textContent = `Страна: ${country}`;
+    }
+</script>
+{% endblock %}
+
+    

@@ -1,35 +1,116 @@
 <!DOCTYPE html>
+{% extends "base.html" %}
 {% load static %}
-
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Список продуктов</title>
-    <link rel="stylesheet" href="{% static 'css/products.css' %}"> <!-- Подключение CSS файла -->
-</head>
-<body>
+{% block title %}Продукты{% endblock %}
+{% block content %}
 
 <h1>Список продуктов</h1>
 
-<label for="product-select">Выберите продукт:</label>
-<select id="product-select" onchange="showProductDetails()">
-    <option value="">--Выберите продукт--</option>
-    {% for p in products %}
-        <option value="{{ p.id }}">{{ p.name }} </option>
-    {% endfor %}
-</select>
+<link rel="stylesheet" href="{% static 'css/products.css' %}">
 
+<!-- Поле для поиска -->
+<input type="text" id="search" placeholder="Поиск продуктов..." oninput="filterProducts()" />
+
+
+
+<!-- Форма детали продукта -->
 <div class="product-details" id="product-details" style="display: none;">
     <h2>Детали продукта</h2>
-    <label>Название: <span id="product-name"></span></label>
-    <label>Калорийность: <span id="product-calories"></span> ккал</label>
-    <label>Содержание белка: <span id="product-protein"></span> г</label>
-    <label>Содержание жира: <span id="product-fat"></span> г</label>
-    <label>Содержание углеводов: <span id="product-carbs"></span> г</label>
+    
+    <!-- Фото продукта -->
+    <img id="product-image" src="" alt="" class="product-image">
+    
+    <!-- Название продукта -->
+    <h3 id="product-name"></h3>
+    
+    <!-- БЖУ -->
+    <div class="nutrition-info">
+        <p>Калорийность: <span id="product-calories"></span> ккал</p>
+        <p>Содержание белка: <span id="product-protein"></span> г</p>
+        <p>Содержание жира: <span id="product-fat"></span> г</p>
+        <p>Содержание углеводов: <span id="product-carbs"></span> г</p>
+    </div>
+    
+    <!-- Описание продукта -->
+    <div class="product-description">
+        <h4>Описание:</h4>
+        <p id="product-description"></p>
+    </div>
 </div>
-<script src="{% static 'js/products.js' %}"></script> <!-- Подключение JS файла -->
-</body>
-</html>
 
+<!-- Список продуктов -->
+<ul id="product-list">
+    {% for p in products %}
+    <li data-id="{{ p.id }}">{{ p.name }}</li>
+    {% endfor %}
+</ul>
 
+<script>
+// Функция для инициализации массива продуктов
+const products = [
+    {% for p in products %}
+    {
+        id: {{ p.id }},
+        name: "{{ p.name|escapejs }}", // Экранируем строки для предотвращения ошибок
+        calories: {{ p.kcals }},
+        proteins: {{ p.proteins }},
+        fats: {{ p.fats }},
+        carbs: {{ p.carbs }},
+        image_url: "{{ p.image_url|escapejs }}", // Фото продукта
+        description: "{{ p.description|escapejs }}" // Описание продукта
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+
+// Функция для фильтрации продуктов по вводу в строке поиска
+function filterProducts() {
+    const searchInput = document.getElementById('search').value.toLowerCase();
+    const productList = document.getElementById('product-list');
+    const products = productList.getElementsByTagName('li');
+
+    for (let i = 0; i < products.length; i++) {
+        const productName = products[i].textContent.toLowerCase();
+        if (productName.includes(searchInput)) {
+            products[i].style.display = ''; // Показываем элемент
+        } else {
+            products[i].style.display = 'none'; // Скрываем элемент
+        }
+    }
+}
+
+// Функция для отображения деталей о выбранном продукте
+function showProductDetails(productId) {
+    const product = products.find(p => p.id == productId);
+    const details = document.getElementById('product-details');
+
+    if (product) {
+        document.getElementById('product-name').innerText = product.name;
+        document.getElementById('product-calories').innerText = product.calories;
+        document.getElementById('product-protein').innerText = product.proteins;
+        document.getElementById('product-fat').innerText = product.fats;
+        document.getElementById('product-carbs').innerText = product.carbs;
+        document.getElementById('product-image').src = product.image_url; // Устанавливаем изображение
+        document.getElementById('product-description').innerText = product.description; // Описание продукта
+        details.style.display = 'block'; // Показываем детали
+    } else {
+        console.warn('Продукт не найден!');
+    }
+}
+
+// Добавление обработчиков событий для элементов списка
+document.addEventListener('DOMContentLoaded', () => {
+const productList = document.getElementById('product-list');
+    const productsItems = productList.getElementsByTagName('li');
+
+    for (let i = 0; i < productsItems.length; i++) {
+        productsItems[i].addEventListener('click', () => {
+            const selectedId = productsItems[i].getAttribute('data-id');
+            showProductDetails(selectedId);
+        });
+    }
+
+    console.log('product.js работает');
+});
+</script>
+
+{% endblock %}

@@ -1,24 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Калькулятор калорий</title>
-<link rel="stylesheet" href=".\css\calculator.css">
-</head>
-<body>
-<div class="calculator">
-    <h1>Калькулятор калорий</h1>
-    <label for="protein">Белки (г):</label>
-    <input type="number" id="protein" name="protein" required>
-    <label for="fat">Жиры (г):</label>
-    <input type="number" id="fat" name="fat" required>
-    <label for="carbs">Углеводы (г):</label>
-    <input type="number" id="carbs" name="carbs" required>
-    <button onclick="calculateCalories()">Рассчитать</button>
-    <p id="result"></p>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Калькулятор{% endblock %}
+{% block content %}
+
+<h1>Калькулятор калорий</h1>
+
+<!-- Поле для поиска продуктов -->
+<input type="text" id="search" placeholder="Поиск продуктов..." oninput="filterProducts()" />
+
+<!-- Список добавленных продуктов -->
+<h2>Добавленные продукты</h2>
+<ul id="added-products"></ul>
+
+<div class="total-calories" id="total-calories" style="display: none;">
+    <h3>Общее количество калорий: <span id="calorie-sum">0</span> ккал</h3>
 </div>
 
-<script src=".\js\calculator.js"></script>
-</body>
-</html>
+<!-- Список доступных продуктов -->
+<div>
+  <ul id="product-list">
+      {% for p in products %}
+      <li data-id="{{ p.id }}" onclick="addProduct({{ p.id }})">
+          {{ p.name }} ({{ p.kcals }} ккал)
+      </li>
+      {% endfor %}
+  </ul>
+</div>
+<script>
+// Инициализация массива продуктов
+const products = [
+    {% for p in products %}
+    {
+        id: {{ p.id }},
+        name: "{{ p.name|escapejs }}",
+        calories: {{ p.kcals }}
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+];
+
+// Функция для фильтрации продуктов
+function filterProducts() {
+    const searchInput = document.getElementById('search').value.toLowerCase();
+    const productList = document.getElementById('product-list');
+    const productItems = productList.getElementsByTagName('li');
+
+    for (let i = 0; i < productItems.length; i++) {
+        const productName = productItems[i].textContent.toLowerCase();
+        if (productName.includes(searchInput)) {
+            productItems[i].style.display = ''; // Показываем элемент
+        } else {
+            productItems[i].style.display = 'none'; // Скрываем элемент
+        }
+    }
+}
+
+// Функция для добавления продукта в список добавленных продуктов
+const addedProductIds = new Set(); // Для предотвращения добавления одинаковых продуктов
+const calorieSumElement = document.getElementById('calorie-sum');
+let totalCalories = 0;
+
+function addProduct(productId) {
+    if (addedProductIds.has(productId)) {
+        alert("Этот продукт уже добавлен!");
+        return; // Выход из функции, если продукт уже добавлен
+    }
+
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        const addedProductsList = document.getElementById('added-products');
+        const newListItem = document.createElement('li');
+
+        newListItem.textContent = product.name + ' (' + product.calories + ' ккал)';
+        addedProductsList.appendChild(newListItem);
+
+        addedProductIds.add(productId); // Добавляем продукт в множество добавленных продуктов
+        totalCalories += product.calories; // Суммируем калории
+        calorieSumElement.innerText = totalCalories; // Обновляем отображение общей суммы калорий
+        
+        document.getElementById('total-calories').style.display = 'block'; // Показываем сумму калорий
+    }
+}
+
+</script>
+
+{% endblock %}
