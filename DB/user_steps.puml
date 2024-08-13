@@ -1,0 +1,134 @@
+@startuml
+!theme monokai_npp
+
+actor User
+participant "Главная страница" as Home
+participant "Блюда" as Dish
+participant "Продукты" as Products
+participant "Калькулятор калорий" as Calculator
+participant "Профиль" as Profile
+database "База данных" as DB
+
+skinparam sequenceMessageAlign center
+
+User -> Home: Переход на главную страницу
+activate Home
+Home -> User: Отображение главной страницы
+deactivate Home
+
+alt #4A3030 Блюда
+    User -> Dish: клик "Продукты"
+    activate Dish
+    Dish -> DB: Запрос списка
+    activate DB
+    DB -> Dish: Получение списка блюд
+    deactivate DB
+    Dish -> User: Отображение страницы с Блюдами
+    User -> Dish: Выбор блюда
+    Dish -> DB: Запрос выбранного блюда
+    activate DB
+    DB -> Dish: Получение данных блюда
+    deactivate DB
+    Dish -> User: Отображение формы блюда
+    deactivate Dish
+end
+
+alt #344A30 Продукты
+    User -> Products: Клик "Продукты"
+    activate Products
+    Products -> DB: Запрос данных о продуктах
+    activate DB
+    DB -> Products: Получение данных о продуктах
+    deactivate DB
+    Products -> User: Отображение списка форм продуктов
+    User -> Products: Выбор продукта
+    Products -> User: Отображение формы продукта
+    deactivate Products
+end
+
+alt #304A4A Калькулятор
+    User -> Calculator: Клик "Калькулятор"
+    activate Calculator
+    Calculator -> User: Отображение страницы Калькулятора
+    Calculator -> DB: Запрос списка продуктов
+    activate DB
+    DB -> Calculator: Получение списка продуктов
+    Calculator -> DB: Запрос списка Блюд
+    DB -> Calculator: Получение списка Блюд
+    deactivate DB
+
+    User -> Calculator: Выбор продукта из списка
+    User -> Calculator: Ввод веса продукта
+    User -> Calculator: Нажать "Добавить"
+    Calculator -> User: Отображение продукта и его данных в форме
+
+    User -> Calculator: Выбор блюда из списка
+    User -> Calculator: Ввод веса Блюда
+    User -> Calculator: Нажать "Добавить"
+    Calculator -> User: Отображение блюда и его данных в форме
+    deactivate Calculator
+end
+
+alt #4A4930 Профиль
+    User -> Profile: Клик "Профиль"
+    activate Profile
+    Profile -> DB: Запрос данных пользователя
+    activate DB
+    DB -> Profile: Получение данных пользователя
+    deactivate DB
+    Profile -> User: Отображение формы профиля
+
+    group #686640 Редактировать
+        User -> Profile: Нажать "Редактировать профиль"
+        Profile -> User: Отображение формы редактирования профиля
+        User -> Profile: Ввод новых данных в форму
+        User -> Profile: Нажать "Сохранить"
+    end
+
+    Profile -> DB: Перезапись данных в БД
+    Profile -> User: Отображение профиля с новыми данными
+
+    group #686640 Мои блюда
+        User -> Profile: Нажать "Мои блюда"
+        Profile -> DB: Запрос списка сохраненных блюд пользователя
+        activate DB
+        DB -> Profile: Получение списка блюд
+        deactivate DB
+        Profile -> User: Отображение списка форм блюд
+        User -> Profile: Нажать "Добавленные"
+        Profile -> User: Отображает список добавленных блюд
+        User -> Profile: Нажать "Созданные"
+        Profile -> User: Отображение созданных блюд
+    end
+
+    alt #8C8845 Создать блюдо
+        User -> Profile: Нажать "Создать блюдо"
+        Profile -> DB: Запрос списка продуктов и данных
+        activate DB
+        DB -> Profile: Получение списка продуктов и данных
+        deactivate DB
+
+        Profile -> User: Отображение формы создания блюда
+        User -> Profile: Ввод названия блюда
+        User -> Profile: Ввод описания блюда
+        User -> Profile: Выбор продукта из списка
+        User -> Profile: Указание веса продукта
+        User -> Profile: Нажать "Добавить"
+        Profile -> User: Отображение продукта в списке добавленных
+        User -> Profile: Нажать "Сохранить"
+        Profile -> DB: Добавление в БД сохраненных блюд новое блюдо
+        Profile -> User: Отображается список созданных пользователем блюд
+    end
+
+    alt #7C8C45
+        User -> Profile: Нажать "Редактировать"
+        Profile -> DB: Запрос списка продуктов и данных
+        activate DB
+        DB -> Profile: Получение списка продуктов и данных
+        deactivate DB
+        Profile -> User: Отображение формы редактирования списка продуктов
+    end
+end
+
+@enduml
+        

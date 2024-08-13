@@ -1,0 +1,99 @@
+@startuml
+
+!include database.iuml
+!theme monokai_npp
+scale 1
+
+$table(users){
+    $pk(id)
+    $nn(nick)
+    $nn(password)
+    $nn(email)
+    $nn(created_at)
+    $nn(role)
+}
+
+$table(products){
+    $pk(id)
+    $nn(name)
+    $nn(description)
+    $nn(proteins)
+    $nn(fats)
+    $nn(carbs)
+    $nn(kcals)
+    
+}
+
+$table(dish){
+    $pk(id)
+    $nn(name)
+    $nn(description)
+    $nn(proteins)
+    $nn(fats)
+    $nn(carbs)
+    $nn(kcals)
+}
+
+$table(dish_products){
+    $pk(id)
+    $fk(dish_id)
+    $fk(product_id)
+    $nn(quantity)
+}
+
+$table(food_logs){
+    $pk(id)
+    $fk(user_id)
+    $fk(dish_id)
+    $nn(total_calories)
+    $nn(created_at)
+}
+
+$table(food_log_products){
+    $pk(id)
+    $fk(food_log_id)
+    $fk(product_id)
+    $nn(quantity)
+}
+
+$table(user_dishes){
+    $pk(id)
+    $fk(user_id)
+    $nn(name)
+    $nn(description)
+    $nn(total_calories)
+    $nn(created_at)
+}
+
+$table(user_dish_products){
+    $pk(id)
+    $fk(user_dish_id)
+    $fk(product_id)
+    $nn(quantity)
+}
+
+$table(saved_dishes){
+    $pk(id)
+    $fk(user_id)
+    $fk(dish_id)
+    $nn(created_at)
+}
+
+
+users ||-right-|{ food_logs
+users ||--|{ user_dishes
+users ||-up-|{ saved_dishes
+
+products ||-right-|{ dish_products
+products ||-left-|{ user_dish_products
+products ||-up-|{ food_log_products
+
+dish ||--|{ dish_products
+dish ||--|{ food_logs
+dish ||-left-|{ saved_dishes
+
+user_dishes ||--|{ user_dish_products
+
+food_logs ||--|{ food_log_products
+
+@enduml
