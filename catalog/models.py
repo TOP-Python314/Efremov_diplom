@@ -25,7 +25,7 @@ class Product(models.Model):
 class Dish(models.Model):
  
     name = CharField(max_length=50, unique=True)
-    images = models.CharField(max_length=255, null=True)
+    images = models.ImageField(upload_to='images/', null=True, blank=True)
     recipes = TextField(null=True)
     proteins = DecimalField(max_digits=5, decimal_places=2)
     fats = DecimalField(max_digits=5, decimal_places=2)
@@ -41,3 +41,9 @@ class Dish(models.Model):
         
     def __repr__(self):
         return f'{self.name}\n{self.kcals}\n{self.proteins}\n{self.fats}\n{self.carbs}'
+
+
+
+
+
+        
