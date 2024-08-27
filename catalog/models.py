@@ -1,7 +1,7 @@
 from django.db import models
-from django.db.models import SmallAutoField, DecimalField, CharField, ManyToManyField, ImageField, TextField
+from django.db.models import SmallAutoField, DecimalField, CharField, ImageField, TextField, ForeignKey
 
-# Create your models here.
+# Модель Product
 class Product(models.Model):
     id = SmallAutoField(primary_key=True)
     name = CharField(max_length=50)
@@ -13,19 +13,17 @@ class Product(models.Model):
     kcals = DecimalField(max_digits=5, decimal_places=2)
     categorys = CharField(max_length=50, null=True)
     areas = CharField(max_length=50, null=True)
-    
+
     class Meta:
         db_table = 'products'
 
     def __repr__(self):
         return f'{self.id}\n{self.name}\n{self.kcals}\n{self.proteins}\n{self.fats}\n{self.carbs}'
-        
 
-
+# Модель Dish
 class Dish(models.Model):
- 
     name = CharField(max_length=50, unique=True)
-    images = models.ImageField(upload_to='images/', null=True, blank=True)
+    images = ImageField(upload_to='images/dishes/', null=True, blank=True)
     recipes = TextField(null=True)
     proteins = DecimalField(max_digits=5, decimal_places=2)
     fats = DecimalField(max_digits=5, decimal_places=2)
@@ -33,17 +31,21 @@ class Dish(models.Model):
     kcals = DecimalField(max_digits=5, decimal_places=2)
     categorys = CharField(max_length=50, null=True)
     areas = CharField(max_length=50, null=True)
-    
-    products = ManyToManyField('Product', db_table='dishes_products')
-    
+
     class Meta:
         db_table = 'dishes'
-        
+
     def __repr__(self):
         return f'{self.name}\n{self.kcals}\n{self.proteins}\n{self.fats}\n{self.carbs}'
-
-
-
-
-
         
+# Модель RecipeIngredient
+class RecipeIngredient(models.Model):
+    dish = ForeignKey(Dish, related_name='ingredients', on_delete=models.CASCADE)
+    product = ForeignKey(Product, on_delete=models.CASCADE)
+    weight = models.FloatField()  # вес продукта в граммах
+
+    class Meta:
+        db_table = 'dishes_products'
+
+    def __repr__(self):
+        return f"{self.product.name} - {self.weight}g"
