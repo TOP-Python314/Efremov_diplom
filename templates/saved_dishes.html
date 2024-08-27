@@ -7,7 +7,12 @@
 <h1>Список сохраненных блюд</h1>
 <title>Сохраненные блюда</title>
 <link rel="stylesheet" href="{% static 'css/saved_dishes.css' %}">
-
+<!-- Форма для создания нового блюда -->
+<div class="create-dish-form">
+    <form action="created_dishes_view" method="POST" enctype="multipart/form-data">
+        <button type="submit">Создать блюдо</button>
+    
+</div>
 <div>
     <div class="container">
         <div class="column">
@@ -25,7 +30,7 @@
                     </div>
                 </div>
             {% endfor %}
-            <!-- Дополнительные блюда можно добавлять аналогичным образом -->
+            
         </div>
         <div class="column">
             <h2>Созданные блюда</h2>
@@ -44,13 +49,6 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
-
-    <!-- Форма для создания нового блюда -->
-    <div class="create-dish-form">
-        <form action="created_dishes_view" method="POST" enctype="multipart/form-data">
-            <button type="submit">Создать блюдо</button>
-        </form>
     </div>
 </div>
 

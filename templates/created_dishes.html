@@ -3,9 +3,9 @@
 {% load static %}
 {% block title %}Сохраненные блюда{% endblock %}
 {% block content %}
-
+    
     <h1>Создать Блюдо</h1>
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" action="created_dishes">
         {% csrf_token %}
         <div>
             <label for="name">Название блюда:</label>
@@ -13,23 +13,23 @@
         </div>
         <div>
             <label for="image">Изображение:</label>
-            
+            <input type="text" id="images" name="images" required>
         </div>
         <div>
             <label for="proteins">Белки (г):</label>
-            <input type="number" id="proteins" name="proteins" required>
+            <input type="number" id="proteins" name="proteins" step="0.01" required>
         </div>
         <div>
             <label for="fats">Жиры (г):</label>
-            <input type="number" id="fats" name="fats" required>
+            <input type="number" id="fats" name="fats" step="0.01" required>
         </div>
         <div>
             <label for="carbs">Углеводы (г):</label>
-            <input type="number" id="carbs" name="carbs" required>
+            <input type="number" id="carbs" name="carbs" step="0.01" required>
         </div>
         <div>
             <label for="kcals">Калории:</label>
-            <input type="number" id="kcals" name="kcals" required>
+            <input type="number" id="kcals" name="kcals" step="0.01" required>
         </div>
         <div>
             <label for="areas">Область:</label>
@@ -43,7 +43,45 @@
             <label for="recipes">Рецепт:</label>
             <textarea id="recipes" name="recipes" rows="4" required></textarea>
         </div>
+
+        {{ dish_form.as_p }}
+        <h2>Добавить Продукты</h2>
+        <div id="ingredients">
+            <div class="ingredient">
+                <select name="products">
+                    <option>--Выберите продукт--</option>
+                    {% for p in products %}
+                        <option value="{{ p.id }}">{{ p.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="number" name="weights" placeholder="Вес (грамм)">
+            </div>
+        </div>
+        <button type="button" onclick="addIngredient()">Добавить еще ингредиент</button>
+        
         <button type="submit">Создать Блюдо</button>
     </form>
-    <a href="saved_dishes">Назад к сохранённым блюдам</a>
- {% endblock %}
+<a href="saved_dishes">Назад к сохранённым блюдам</a>
+
+<script>
+    
+    function addIngredient() {
+    let ingredients = document.getElementById('ingredients');
+    let newIngredient = document.createElement('div');
+    newIngredient.classList.add('ingredient');
+    newIngredient.innerHTML = `
+        <select name="products">
+            <option>--Выберите продукт--</option>
+            {% for p in products %}
+                
+                <option value="{{ p.id }}">{{ p.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="weights" placeholder="Вес (грамм)">
+    `;
+    ingredients.appendChild(newIngredient);
+    }
+
+</script>
+
+{% endblock %}

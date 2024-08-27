@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Сохраненные блюда{% endblock %}
+{% block content %}
+
+<div class="column">
+    <h2>Список блюд</h2>
+    <link rel="stylesheet" href="{% static 'css/dishes.css' %}">
+    {% for dish in dishes %}
+        <div class="dish-form" onclick="openDishModal('{{ dish.id }}', '{{ dish.name }}', '{{ dish.kcals }}', '{{ dish.proteins }}', '{{ dish.fats }}', '{{ dish.carbs }}')">
+            
+            {% if dish.images %}
+                <img src="{{ dish.images }}" alt="{{ dish.name }}" class="dish-image" style="width: 200px; height: auto;">
+            {% else %}
+                <img src="{% static 'images/dishes/img_none.png' %}" alt="Изображение отсутствует" class="dish-image" style="width: 150px; height: auto;">
+            {% endif %}
+        
+
+            <div class="dish-details">
+                <span class="dish-name-value">{{ dish.name }}</span>
+                <span class="dish-name-value">{{ dish.images }}</span>
+                <div>
+                    <label class="dish-calories">Калории:</label>
+                    <span class="dish-calories-value">{{ dish.kcals }}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Модальное окно -->
+<div id="dishModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeDishModal()">&times;</span>
+        <h2 id="modal-dish-name"></h2>
+        <p><strong>Калории:</strong> <span id="modal-dish-kcals"></span></p>
+        <p><strong>Белки:</strong> <span id="modal-dish-proteins"></span></p>
+        <p><strong>Жиры:</strong> <span id="modal-dish-fats"></span></p>
+        <p><strong>Углеводы:</strong> <span id="modal-dish-carbs"></span></p>
+    </div>
+</div>
+
+<script>
+    function openDishModal(id, name, kcals, proteins, fats, carbs) {
+        document.getElementById('modal-dish-name').textContent = name;
+        document.getElementById('modal-dish-kcals').textContent = kcals;
+        document.getElementById('modal-dish-proteins').textContent = proteins;
+        document.getElementById('modal-dish-fats').textContent = fats;
+        document.getElementById('modal-dish-carbs').textContent = carbs;
+        
+        const modal = document.getElementById('dishModal');
+        modal.style.display = "block"; // Показываем модальное окно
+    }
+
+    function closeDishModal() {
+        const modal = document.getElementById('dishModal');
+        modal.style.display = "none"; // Скрываем модальное окно
+    }
+</script>
+{% endblock %}
