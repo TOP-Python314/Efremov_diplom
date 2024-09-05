@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
+from django.urls import reverse
+import os
 
 from django.contrib.auth.decorators import login_required
 
@@ -23,7 +26,7 @@ def login_view(request):
                 messages.error(request, 'Неверное имя пользователя или пароль.')
                 print("Authentication failed for user:", username)
             else:
-                print("Authenticated user:", user.username)  # Здесь можно вывести дополнительную информацию о пользователе
+                print("Authenticated user:", user.username)  # 
                 login(request, user)
                 return redirect('main')  # Перенаправляем на главную страницу после входа
         else:
@@ -39,7 +42,7 @@ def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)  # Не сохраняет в БД сразу
+            user = form.save(commit=False) 
             user.set_password(form.cleaned_data['password1'])  # Установка хешированного пароля
             user.save()  # Сохраняем нового пользователя в БД db_users
             username = form.cleaned_data.get('username')
@@ -64,19 +67,45 @@ def profile(request):
         user_profile = models.UserProfile.objects.get(user=request.user)
     except models.UserProfile.DoesNotExist:
         messages.error(request, 'Профиль не найден.')
-        return redirect('main')  # Замените на URL по умолчанию
+        return redirect('main')  
 
     if request.method == 'POST':
         user_form = forms.UserUpdateForm(request.POST, instance=request.user)  # Обновляем пользователя
         profile_form = forms.UserProfileForm(request.POST, request.FILES, instance=user_profile)  # Обновляем профиль
-        
+
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()       # Сохраняем данные пользователя
-            profile_form.save()    # Сохраняем данные профиля
-            return redirect('profile')  # Перенаправление на страницу профиля
-            
+            user_form.save()  # Сохраняем данные пользователя
+
+            profile = profile_form.save(commit=False)  
+
+            # Если новое изображение загружено
+            if request.FILES.get('profile_image'):
+                # Удаляем старое изображение, если оно существует
+                if user_profile.profile_image and default_storage.exists(user_profile.profile_image.name):
+                    default_storage.delete(user_profile.profile_image.name)  # Удаляем файл из хранилища
+
+                # Устанавливаем правильное имя и путь к новому изображению
+                ext = os.path.splitext(profile.profile_image.name)[1]  # Получаем расширение
+                profile.profile_image.name = f"profile_images/{request.user.id}{ext}"  # Устанавливаем новое имя
+                print('Новое имя файла:', profile.profile_image.name)
+
+            # Если новое изображение не загружено, оставляем старое изображение
+            else:
+                
+                profile.profile_image = user_profile.profile_image  
+            # Сохраняем профиль с правильно установленным именем файла
+            print('Перед сохранения имя файла:', profile.profile_image.name)
+            profile.save()  
+            print('После сохранения имя файла:', profile.profile_image.name)
+
+            return redirect('profile')
+
     else:
         user_form = forms.UserUpdateForm(instance=request.user)
         profile_form = forms.UserProfileForm(instance=user_profile)
 
     return render(request, 'profile.html', {'user_form': user_form, 'profile_form': profile_form, 'user': user_profile})
+
+def logout_view(request):
+    logout(request)  # Выход пользователя
+    return redirect(reverse('login'))  
