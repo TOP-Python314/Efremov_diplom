@@ -1,18 +1,70 @@
-.column {
-    max-width: 800px; 
-    margin: 0 auto; 
-    padding: 20px; 
-    border: 2px solid #007bff; 
-    border-radius: 8px; 
-    background-color: #ffffff; 
+/* Общие стили для html и body */
+html, body {
+    font-family: Arial, sans-serif;
+    height: 100%; /* Установка высоты для html и body */
+    margin: 0; /* Убираем отступы */
 }
 
+/* Заголовок */
+header {
+    position: relative; /* Относительное позиционирование для корректной работы */
+    z-index: 1;
+}
+
+/* Основной контент */
+#main-content {
+    display: flex;
+    height: calc(100vh - 60px); /* Учитывая высоту header, скорректируйте 60px по мере необходимости */
+}
+
+/* Боковая панель категорий */
+#category-sidebar {
+    background-color: #f1f1f1; /* Цвет фона боковой панели */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    position: sticky; /* Делаем его фиксированным относительно определенной позиции */
+    top: 0; /* Фиксируем сверху */
+    height: 100%; /* Задаем полную высоту */
+}
+
+/* Список категорий */
+#category-list {
+    list-style-type: none; /* Отключаем стандартные маркеры списка */
+    padding: 0; /* Убираем отступы */
+    margin: 0; /* Убираем маргин */
+}
+
+/* Элементы списка категорий */
+#category-list li {
+    margin-bottom: 15px; /* Отступ между категориями */
+    background-color: #ffffff; /* Цвет фона для категорий */
+    padding: 10px; /* Внутренний отступ */
+    border-radius: 5px; /* Закругление углов */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для каждой категории */
+    transition: background-color 0.3s, transform 0.2s; /* Плавный переход */
+}
+
+/* Колонки */
+.column {
+    flex: 1; /* Позволяет колонке занимать оставшееся пространство */
+    padding: 20px; /* Отступы внутри колонки */
+}
+
+/* Заголовки */
 h2 {
     text-align: center; 
     color: #333;
 }
 
-.dish-form {
+/* Блок с блюдом */
+.item-block {
+    display: flex;
+    width: 100%; /* Задаем ширину на всю страницу */
+    align-items: stretch; /* Растянуть дочерние элементы по высоте */
+}
+
+/* Основные стили для формы блюда */
+.item-details {
     display: flex; 
     background-color: #f9f9f9; 
     border: 1px solid #ccc; 
@@ -21,34 +73,34 @@ h2 {
     margin: 15px 0; 
     cursor: pointer; 
     transition: background-color 0.3s; 
+    flex-grow: 1; /* Позволяем элементу занимать доступное пространство */
 }
 
-.dish-form:hover {
+.item-details:hover {
     background-color: #efefef; 
 }
 
-.dish-image {
+/* Изображение блюда */
+.item-image {
     width: 100px; 
     height: auto; 
     border-radius: 5px; 
     margin-right: 15px; 
 }
 
-.dish-details {
-    display: flex; 
-    flex-direction: column; 
-}
-
-.dish-name, .dish-calories {
+/* Подробности о блюде */
+.item-name, .item-calories {
     font-weight: bold;
     margin-bottom: 5px; 
 }
 
-.dish-name-value, .dish-calories-value {
+.item-name-value, .item-calories-value {
     color: #555; 
     margin-bottom: 10px; 
 }
-.dish-extra-details {
+
+/* Стиль для дополнительных деталей блюда */
+.item-extra-details {
     margin-top: 10px; 
     padding: 10px; 
     border: 1px solid #ccc; 
@@ -56,6 +108,7 @@ h2 {
     background-color: #f1f1f1; 
 }
 
+/* Модальное окно */
 .modal {
     display: none;  
     position: fixed;  
@@ -65,7 +118,6 @@ h2 {
     width: 100%; 
     height: 100%;  
     overflow: auto;  
-    background-color: rgb(0, 0, 0);  
     background-color: rgba(0, 0, 0, 0.4);  
 }
 
@@ -78,6 +130,7 @@ h2 {
     border-radius: 10px; 
 }
 
+/* Кнопка закрытия модального окна */
 .close {
     color: #aaa; 
     float: right; 
@@ -90,4 +143,105 @@ h2 {
     color: black; 
     text-decoration: none; 
     cursor: pointer; 
+}
+
+/* Информация о блюдах */
+.modal-dish-data {
+    display: flex; /* Используем Flexbox для выравнивания */
+    align-items: center; /* Выравнивание вертикально по центру */
+    margin: 10px; /* Отступ для внешнего контейнера */
+}
+
+/* Питательная информация о блюдах */
+.dish-nutrition-info {
+    display: flex; /* Flexbox для группировки элементов */
+    flex-direction: row; /* Вертикальное расположение */
+}
+
+.nutrition-item {
+    margin: 10px; /* Отступы между элементами */
+}
+
+.nutrition-item span {
+    font-weight: bold; /* Жирный шрифт для значений */
+    display: block; /* Отображение блочным элементом для разделения */
+}
+
+.nutrition-item p {
+    font-weight: normal; /* Тонкий шрифт для названия */
+    margin: 0; /* Убираем отступы */
+}
+
+/* Стиль кнопки сохранения */
+.save-button {
+    position: relative;
+    width: 50px; /* Ширина кнопки */
+    height: 50px; /* Высота кнопки */
+    border: none; /* Убираем стандартные границы */
+    border-radius: 50%; /* Круглая форма */
+    background-color: #4CAF50; /* Цвет фона кнопки */
+    color: white; /* Цвет текста (плюса) */
+    font-size: 24px; /* Размер шрифта для плюса */
+    text-align: center; /* Центрируем текст */
+    cursor: pointer; /* Указатель при наведении */
+    transition: background-color 0.3s; /* Плавный переход цвета */
+    outline: none; /* Убираем стандартные обводки */
+}
+
+.save-button:hover {
+    background-color: #45a049; /* Цвет кнопки при наведении */
+}
+
+/* Стиль для иконки плюса */
+.plus-icon {
+    font-weight: bold; /* Увеличиваем жирность текста */
+    line-height: 50px; /* Центрируем плюс вертикально */
+}
+
+/* Подсказка для кнопки сохранения */
+.save-button .tooltip {
+    visibility: hidden; /* Скрываем подсказку по умолчанию */
+    width: 120px; /* Ширина подсказки */
+    background-color: black; /* Цвет фона подсказки */
+    color: #fff; /* Цвет текста подсказки */
+    text-align: center; /* Центрируем текст подсказки */
+    border-radius: 5px; /* Скругляем углы подсказки */
+    
+    /* Позиционирование подсказки */
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Подсказка выше кнопки */
+    left: 50%;
+    margin-left: -60px; /* Смещаем влево для центрирования */
+    
+    padding: 5px 0;
+}
+
+.save-button:hover .tooltip {
+    visibility: visible; /* Показываем подсказку при наведении */
+}
+
+/* Контейнер для кнопки добавления */
+.add-button-container {
+    margin: 15px 5px; /* Отступ между блоком с блюдом и кнопкой */
+    display: flex; /* Flexbox для центрирования кнопки по высоте */
+    align-items: stretch; /* Растянуть кнопку по высоте */
+}
+
+/* Кнопка сохранения с полным расширением */
+.save-button {
+    width: 100%; /* Кнопка займет всю ширину контейнера */
+    height: 100%; /* Установить высоту кнопки равной высоте родителя */
+    border: none; /* Убираем стандартные границы */
+    border-radius: 5px; /* Углы кнопки */
+    background-color: #007BFF; /* Цвет фона кнопки */
+    color: white; /* Цвет текста */
+    cursor: pointer; /* Курсор при наведении */
+    text-align: center; /* Текст по центру */
+    transition: background-color 0.3s; /* Плавный переход цвета */
+    outline: none; /* Убираем стандартные обводки */
+}
+
+.save-button:hover {
+    background-color: #0056b3; /* Цвет фона при наведении */
 }
