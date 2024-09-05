@@ -12,33 +12,49 @@ SECRET_KEY = 'django-insecure-&n7rx9u$ukd)t(p)_@%rc+tk&)l47z--ri+traj$w%u0bc&*yn
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+APPEND_SLASH = False
+
+AUTH_USER_MODEL = 'auth.User'
+
+LOGIN_URL = '/admin/login/'
+
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = [
-    BASE_DIR / 'media',
-]
+MEDIA_ROOT = BASE_DIR / 'media'
 
-
-ALLOWED_HOSTS = []
 WSGI_APPLICATION = 'core.wsgi.application'
 ROOT_URLCONF = 'core.urls'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',  # Выполните проверку, что это приложение присутствует
+    'django.contrib.auth',
     'django.contrib.contenttypes',
-    'catalog.apps.CatalogConfig',
+    'django.contrib.sessions',
+    'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_extensions',
+    'catalog.apps.CatalogConfig',
+    'accounts.apps.AccountsConfig',
 ]
 
+
+
 MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',  # Нужно добавить
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Нужно добавить
+    'django.contrib.messages.middleware.MessageMiddleware',  # Нужно добавить
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 
@@ -53,6 +69,8 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -70,7 +88,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
 }
 
 # Internationalization
