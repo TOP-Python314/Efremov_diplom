@@ -4,29 +4,65 @@
 {% block title %}Сохраненные блюда{% endblock %}
 {% block content %}
 
-<div class="column">
-    <h2>Список блюд</h2>
-    <link rel="stylesheet" href="{% static 'css/dishes.css' %}">
-    {% for dish in dishes %}
-        <div class="dish-form" onclick="openDishModal('{{ dish.id }}', '{{ dish.name }}', '{{ dish.kcals }}', '{{ dish.proteins }}', '{{ dish.fats }}', '{{ dish.carbs }}')">
-            
-            {% if dish.images %}
-                <img src="{{ dish.images }}" alt="{{ dish.name }}" class="dish-image" style="width: 200px; height: auto;">
-            {% else %}
-                <img src="{% static 'images/dishes/img_none.png' %}" alt="Изображение отсутствует" class="dish-image" style="width: 150px; height: auto;">
-            {% endif %}
-        
+<link rel="stylesheet" href="./static/css/dishes.css">
 
-            <div class="dish-details">
-                <span class="dish-name-value">{{ dish.name }}</span>
-                <span class="dish-name-value">{{ dish.images }}</span>
-                <div>
-                    <label class="dish-calories">Калории:</label>
-                    <span class="dish-calories-value">{{ dish.kcals }}</span>
+<!-- Основной контент -->
+<div id="main-content">
+    <div class="column">
+        <h2>Список блюд</h2>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
                 </div>
-            </div>
+            {% endfor %}
+        {% endif %}
+        <div id="dish-list">
+            <form method="post" action="{% url 'add_user_dish' %}">
+                {% csrf_token %}
+                {% for dish in dishes %}
+                    <div class="dish-block">
+                        <div class="dish-form" onclick="openDishModal('{{ dish.id }}', '{{ dish.name }}', '{{ dish.kcals }}', '{{ dish.proteins }}', '{{ dish.fats }}', '{{ dish.carbs }}')" data-category="{{ dish.categorys }}">
+                            {% if dish.images %}
+                                <img src="{{ dish.images }}" alt="{{ dish.name }}" class="dish-image" style="width: 200px; height: auto;">
+                            {% else %}
+                                <img src="{% static 'images/dishes/img_none.png' %}" alt="Изображение отсутствует" class="dish-image" style="width: 150px; height: auto;">
+                            {% endif %}
+                            <div class="dish-details">
+                                <h3 class="dish-name-value">{{ dish.name }}</h3>
+                                <div>
+                                    <label class="dish-calories">Калории:</label>
+                                    <span class="dish-calories-value">{{ dish.kcals }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-button-container">
+                            <form method="POST" action="{% url 'add_user_dish' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="dish_id" value="{{ dish.id }}">
+                                <button class="save-button" type="submit">
+                                    <span class="plus-icon">+</span>
+                                    <span class="tooltip">Сохранить к себе</span>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </form>
         </div>
-    {% endfor %}
+    </div>
+
+    <div id="category-sidebar">
+        <h2>Категории</h2>
+        <ul id="category-list">
+            <li onclick="filterByCategory('горячее')">Горячее</li>
+            <li onclick="filterByCategory('салаты')">Салаты</li>
+            <li onclick="filterByCategory('каши')">Каши</li>
+            <li onclick="filterByCategory('гарниры')">Гарниры</li>
+        </ul>
+        
+    </div>
 </div>
 
 <!-- Модальное окно -->
@@ -34,10 +70,34 @@
     <div class="modal-content">
         <span class="close" onclick="closeDishModal()">&times;</span>
         <h2 id="modal-dish-name"></h2>
-        <p><strong>Калории:</strong> <span id="modal-dish-kcals"></span></p>
-        <p><strong>Белки:</strong> <span id="modal-dish-proteins"></span></p>
-        <p><strong>Жиры:</strong> <span id="modal-dish-fats"></span></p>
-        <p><strong>Углеводы:</strong> <span id="modal-dish-carbs"></span></p>
+        <div class="modal-dish-data">
+            <image>
+                {% if dish.images.url %}
+                    <img src="{{ dish.images.url }}" class="dish-image" style="width: 50px; height: auto;">
+                {% else %}
+                    <img src="{% static 'images/dishes/img_none.png' %}" class="dish-image" style="width: 50px; height: auto;">
+                {% endif %}
+            </image>
+            <div class="dish-nutrition-info>">
+                <div class="nutrition-item">
+                    <span id="modal-dish-kcals"></span>
+                    <p>Калории</p>
+                </div>
+                <div class="nutrition-item">
+                    <span id="modal-dish-proteins"></span>
+                    <p>Белки</p>
+                </div>
+                <div class="nutrition-item">
+                    <span id="modal-dish-fats"></span>
+                    <p>Жиры</p>
+                </div>
+                <div class="nutrition-item">
+                    <span id="modal-dish-carbs"></span>
+                    <p>Углеводы</p>
+                </div>
+            </div>
+        </div>
+        
     </div>
 </div>
 
@@ -57,5 +117,23 @@
         const modal = document.getElementById('dishModal');
         modal.style.display = "none"; // Скрываем модальное окно
     }
+
+    function filterByCategory(category) {
+        const dishList = document.getElementById('dish-list');
+        const dishBlocks = dishList.getElementsByClassName('dish-block'); // Изменено на dishBlocks
+
+        for (let i = 0; i < dishBlocks.length; i++) {
+            const dishForm = dishBlocks[i].getElementsByClassName('dish-form')[0]; // Получаем dish-form
+            const dishCategory = dishForm.getAttribute('data-category'); // Получаем категорию через dish-form
+
+            if (dishCategory === category || category === 'Все') {
+                dishBlocks[i].style.display = ''; // Показываем весь блок блюда, включая кнопку
+            } else {
+                dishBlocks[i].style.display = 'none'; // Скрываем весь блок блюда
+            }
+        }
+        console.log("Фильтруем по категории: " + category);
+    }
+    
 </script>
 {% endblock %}

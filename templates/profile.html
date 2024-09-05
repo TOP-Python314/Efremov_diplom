@@ -7,8 +7,22 @@
 <title>Профиль пользователя</title>
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 <div class="profile-container">
+
+    <div class="logout-button">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="button">Выйти из профиля</button>
+        </form>
+    </div>
+
     <div class="profile-header">
-        <img src="{{ user.profile_image.url }}" alt="Фото профиля">
+        {% if user.profile_image.url %}
+            <img src="{{ user.profile_image.url }}" style="width: 200px; height: auto;">
+        {% else %}
+            <img src="{% static 'images/default/none_png.png' %}" style="width: 200px; height: auto;">
+            <span>{{ user.profile_image.url }}</span>
+        {% endif %}
+        
         <div>
             <h2>{{ user.user.first_name }} {{ user.user.last_name }} {{ user.middle_name }}</h2> <!-- Отображаем ФИО -->
             <p>{{ user.user.email }}</p>
@@ -35,6 +49,7 @@
         <h3>Редактировать профиль</h3>
         <form id="profileEditForm" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            
             <label for="profile_image">Фото профиля:</label>
             <input type="file" id="profile_image" name="profile_image">
             

@@ -5,7 +5,7 @@
 {% block content %}
     
     <h1>Создать Блюдо</h1>
-    <form method="POST" enctype="multipart/form-data" action="created_dishes">
+    <form method="POST" enctype="multipart/form-data" action="{% url 'created_dishes' %}">
         {% csrf_token %}
         <div>
             <label for="name">Название блюда:</label>
@@ -13,7 +13,7 @@
         </div>
         <div>
             <label for="image">Изображение:</label>
-            <input type="text" id="images" name="images" required>
+            <input type="file" id="images" name="images" required>
         </div>
         <div>
             <label for="proteins">Белки (г):</label>
@@ -48,7 +48,7 @@
         <h2>Добавить Продукты</h2>
         <div id="ingredients">
             <div class="ingredient">
-                <select name="products">
+                <select name="products[]">
                     <option>--Выберите продукт--</option>
                     {% for p in products %}
                         <option value="{{ p.id }}">{{ p.name }}</option>
