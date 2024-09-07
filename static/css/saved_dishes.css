@@ -118,19 +118,29 @@ h1, h2 {
     overflow: auto;  
     background-color: rgba(0, 0, 0, 0.4);  
 }
+/* Информация о блюдах */
 .modal-dish-data {
-    display: flex; /* Используем Flexbox для выравнивания */
-    align-items: center; /* Выравнивание вертикально по центру */
-    margin: 10px; /* Отступ для внешнего контейнера */
+    display: flex;
+    margin: 10px;
+    flex-direction: column;
 }
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;  
     padding: 20px;
     border: 1px solid #888;  
-    width: 80%; 
+    width: 80%;
     border-radius: 10px; 
+    max-height: 80vh; 
+    overflow-y: auto; 
 }
+
+#modal-dish-recipe {
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    margin: 10px 0; 
+}
+
 .nutrition-items{
     display: flex;
 }
@@ -183,4 +193,29 @@ h1, h2 {
 
 .btn:hover {
     background-color: #45a049; /* Темнее при наведении */
+}
+
+
+.modal-dish-products {
+    list-style-type: none; /* Убираем маркеры списка */
+    margin: 10px; /* Убираем отступы */
+    
+}
+
+#product-list {
+    display: flex;
+    padding: 5px 0;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.product-item {
+    display: flex; /* Делаем элементы продуктов флекс-элементами */
+    justify-content: space-between; /* Распределяем продукты и их вес */
+}
+
+/* Питательная информация о блюдах */
+.dish-nutrition-info {
+    display: flex; /* Flexbox для группировки элементов */
+    flex-direction: row; /* Вертикальное расположение */
 }

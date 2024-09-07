@@ -126,10 +126,17 @@ h2 {
     margin: 15% auto;  
     padding: 20px;
     border: 1px solid #888;  
-    width: 80%; 
+    width: 80%;
     border-radius: 10px; 
+    max-height: 80vh; 
+    overflow-y: auto; 
 }
 
+#modal-dish-recipe {
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    margin: 10px 0; 
+}
 /* Кнопка закрытия модального окна */
 .close {
     color: #aaa; 
@@ -254,6 +261,7 @@ h2 {
 .modal-dish-products {
     list-style-type: none; /* Убираем маркеры списка */
     margin: 10px; /* Убираем отступы */
+    
 }
 
 #product-list {
