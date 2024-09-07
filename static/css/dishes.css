@@ -147,9 +147,9 @@ h2 {
 
 /* Информация о блюдах */
 .modal-dish-data {
-    display: flex; /* Используем Flexbox для выравнивания */
-    align-items: center; /* Выравнивание вертикально по центру */
-    margin: 10px; /* Отступ для внешнего контейнера */
+    display: flex;
+    margin: 10px;
+    flex-direction: column;
 }
 
 /* Питательная информация о блюдах */
@@ -157,7 +157,9 @@ h2 {
     display: flex; /* Flexbox для группировки элементов */
     flex-direction: row; /* Вертикальное расположение */
 }
-
+.nutrition-items{
+    display: flex;
+}
 .nutrition-item {
     margin: 10px; /* Отступы между элементами */
 }
@@ -172,25 +174,6 @@ h2 {
     margin: 0; /* Убираем отступы */
 }
 
-/* Стиль кнопки сохранения */
-.save-button {
-    position: relative;
-    width: 50px; /* Ширина кнопки */
-    height: 50px; /* Высота кнопки */
-    border: none; /* Убираем стандартные границы */
-    border-radius: 50%; /* Круглая форма */
-    background-color: #4CAF50; /* Цвет фона кнопки */
-    color: white; /* Цвет текста (плюса) */
-    font-size: 24px; /* Размер шрифта для плюса */
-    text-align: center; /* Центрируем текст */
-    cursor: pointer; /* Указатель при наведении */
-    transition: background-color 0.3s; /* Плавный переход цвета */
-    outline: none; /* Убираем стандартные обводки */
-}
-
-.save-button:hover {
-    background-color: #45a049; /* Цвет кнопки при наведении */
-}
 
 /* Стиль для иконки плюса */
 .plus-icon {
@@ -244,4 +227,43 @@ h2 {
 
 .save-button:hover {
     background-color: #0056b3; /* Цвет фона при наведении */
+}
+
+.dish-block {
+    display: flex;
+    border: 1px solid #ccc; /* Контур блока */
+    border-radius: 8px; /* Скругление углов контурного блока */
+    margin: 20px; /* Отступы между блюдами */
+    padding: 10px; /* Отступы внутри блока */
+    background-color: #f9f9f9; /* Фоновый цвет блока */
+}
+
+.dish-form {
+    display: flex; /* Для размещения элементов в ряд */
+    width: 100%; /* Растягивание на максимальную ширину */
+    cursor: pointer; /* Указатель при наведении */
+}
+.dish-details{
+    margin-left: 30px;
+}
+.dish-image {
+    max-width: 100%; /* Максимальная ширина изображения */
+    height: auto; /* Автоматическая высота для пропорций */
+}
+
+.modal-dish-products {
+    list-style-type: none; /* Убираем маркеры списка */
+    margin: 10px; /* Убираем отступы */
+}
+
+#product-list {
+    display: flex;
+    padding: 5px 0;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.product-item {
+    display: flex; /* Делаем элементы продуктов флекс-элементами */
+    justify-content: space-between; /* Распределяем продукты и их вес */
 }

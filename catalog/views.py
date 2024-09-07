@@ -24,12 +24,15 @@ def products(request):
 
 """ Страница блюд """    
 def dishes(request):
-    dishes_list = models.Dish.objects.all()
+    dishes_list = models.Dish.objects.prefetch_related('ingredients__product').all()
     
+    for dish in dishes_list:
+        dish.ingredients_list = ', '.join([f"{ingredient.product.name}: {ingredient.weight} гр." for ingredient in dish.ingredients.all()])
+        
     return render(request, 'dishes.html', {
         'dishes': dishes_list
     })
-
+    
 @login_required
 def add_user_dish(request):
     if request.method == 'POST':

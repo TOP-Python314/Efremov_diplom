@@ -22,7 +22,7 @@
                 {% csrf_token %}
                 {% for dish in dishes %}
                     <div class="dish-block">
-                        <div class="dish-form" onclick="openDishModal('{{ dish.id }}', '{{ dish.name }}', '{{ dish.kcals }}', '{{ dish.proteins }}', '{{ dish.fats }}', '{{ dish.carbs }}')" data-category="{{ dish.categorys }}">
+                        <div class="dish-form" onclick="openDishModal('{{ dish.id }}', '{{ dish.name }}', '{{ dish.images }}', '{{ dish.kcals }}', '{{ dish.proteins }}', '{{ dish.fats }}', '{{ dish.carbs }}', '{{ dish.recipes|escapejs }}', '{{ dish.ingredients_list|escapejs }}')" data-category="{{ dish.categorys }}">
                             {% if dish.images %}
                                 <img src="{{ dish.images }}" alt="{{ dish.name }}" class="dish-image" style="width: 200px; height: auto;">
                             {% else %}
@@ -71,30 +71,37 @@
         <span class="close" onclick="closeDishModal()">&times;</span>
         <h2 id="modal-dish-name"></h2>
         <div class="modal-dish-data">
-            <image>
-                {% if dish.images.url %}
-                    <img src="{{ dish.images.url }}" class="dish-image" style="width: 50px; height: auto;">
-                {% else %}
-                    <img src="{% static 'images/dishes/img_none.png' %}" class="dish-image" style="width: 50px; height: auto;">
-                {% endif %}
-            </image>
-            <div class="dish-nutrition-info>">
-                <div class="nutrition-item">
-                    <span id="modal-dish-kcals"></span>
-                    <p>Калории</p>
-                </div>
-                <div class="nutrition-item">
-                    <span id="modal-dish-proteins"></span>
-                    <p>Белки</p>
-                </div>
-                <div class="nutrition-item">
-                    <span id="modal-dish-fats"></span>
-                    <p>Жиры</p>
-                </div>
-                <div class="nutrition-item">
-                    <span id="modal-dish-carbs"></span>
-                    <p>Углеводы</p>
-                </div>
+            <div class="dish-nutrition-info"> <!-- Исправил здесь -->
+                <img id="modal-dish-image" class="dish-image" style="width: 350px; height: auto;"> <!-- Обратите внимание на id --> <!-- Закрывающий тег изменён с <image> на <img> -->
+                <div>
+                    <div class="nutrition-items">
+                        <div class="nutrition-item">
+                            <span id="modal-dish-kcals"></span>
+                            <p>Калории</p>
+                        </div>
+                        <div class="nutrition-item">
+                            <span id="modal-dish-proteins"></span>
+                            <p>Белки</p>
+                        </div>
+                        <div class="nutrition-item">
+                            <span id="modal-dish-fats"></span>
+                            <p>Жиры</p>
+                        </div>
+                        <div class="nutrition-item">
+                            <span id="modal-dish-carbs"></span>
+                            <p>Углеводы</p>
+                        </div>
+                    </div>
+                    <div class="modal-dish-products">
+                        <span>Продукты:</span>
+                        <div id="product-list"> </div>
+                    </div>
+                </div>                
+            </div>
+            <div class="nutrition-item"> 
+                <h3>Рецепт</h3>
+                <span id="modal-dish-recipe"></span>
+                
             </div>
         </div>
         
@@ -102,16 +109,33 @@
 </div>
 
 <script>
-    function openDishModal(id, name, kcals, proteins, fats, carbs) {
+    function openDishModal(id, name, images, kcals, proteins, fats, carbs, recipes, ingredients) {
+        document.getElementById('modal-dish-image').src = images;
         document.getElementById('modal-dish-name').textContent = name;
         document.getElementById('modal-dish-kcals').textContent = kcals;
         document.getElementById('modal-dish-proteins').textContent = proteins;
         document.getElementById('modal-dish-fats').textContent = fats;
         document.getElementById('modal-dish-carbs').textContent = carbs;
-        
+        document.getElementById('modal-dish-recipe').textContent = recipes;
+
+        // Обработка и вывод ингредиентов
+        const ingredientsArray = ingredients.split(', '); // Параметры для разделения ingredients
+        const productListContainer = document.getElementById('product-list');
+        productListContainer.innerHTML = ''; // Очищаем предыдущий список
+
+        ingredientsArray.forEach(ingredient => {
+            const ingredientItem = document.createElement('div');
+            ingredientItem.classList.add('product-item');
+
+            ingredientItem.textContent = ingredient; // Используем текст ингредиента
+            productListContainer.appendChild(ingredientItem);
+        });
+
+        // Открытие модального окна
         const modal = document.getElementById('dishModal');
-        modal.style.display = "block"; // Показываем модальное окно
+        modal.style.display = 'block';
     }
+
 
     function closeDishModal() {
         const modal = document.getElementById('dishModal');
