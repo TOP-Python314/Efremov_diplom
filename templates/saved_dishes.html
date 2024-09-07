@@ -26,7 +26,7 @@
                 
                 <div class="dish-block" data-type="{{ dish.type }}">
                 
-                    <div class="dish-form" onclick="openDishModal('{{ dish.id }}', '{{ dish.name }}', '{{ dish.images }}', '{{ dish.kcals }}', '{{ dish.proteins }}', '{{ dish.fats }}', '{{ dish.carbs }}', '{{ dish.recipes|escapejs }}', '{{ dish.type }}')">
+                    <div class="dish-form" onclick="openDishModal('{{ dish.id }}', '{{ dish.name }}', '{{ dish.images }}', '{{ dish.kcals }}', '{{ dish.proteins }}', '{{ dish.fats }}', '{{ dish.carbs }}', '{{ dish.recipes|escapejs }}', '{{ dish.ingredients_list|escapejs }}', '{{ dish.type }}')" data-category="{{ dish.categorys }}">
                         <div class="dish-details">
                             <h3 class="dish-name-value">{{ dish.name }}</h3>
                         </div>
@@ -64,31 +64,37 @@
         <span class="close" onclick="closeDishModal()">&times;</span>
         <h2 id="modal-dish-name"></h2>
         <div class="modal-dish-data">
-            
-            <img id="modal-dish-image" class="dish-image" style="width: 350px; height: auto;"> 
-            <div class="dish-nutrition-info"> 
-                <div class="nutrition-items">
-                    <div class="nutrition-item">
-                        <span id="modal-dish-kcals"></span>
-                        <p>Калории</p>
+            <div class="dish-nutrition-info"> <!-- Исправил здесь -->
+                <img id="modal-dish-image" class="dish-image" style="width: 350px; height: auto;"> <!-- Обратите внимание на id --> <!-- Закрывающий тег изменён с <image> на <img> -->
+                <div>
+                    <div class="nutrition-items">
+                        <div class="nutrition-item">
+                            <span id="modal-dish-kcals"></span>
+                            <p>Калории</p>
+                        </div>
+                        <div class="nutrition-item">
+                            <span id="modal-dish-proteins"></span>
+                            <p>Белки</p>
+                        </div>
+                        <div class="nutrition-item">
+                            <span id="modal-dish-fats"></span>
+                            <p>Жиры</p>
+                        </div>
+                        <div class="nutrition-item">
+                            <span id="modal-dish-carbs"></span>
+                            <p>Углеводы</p>
+                        </div>
                     </div>
-                    <div class="nutrition-item">
-                        <span id="modal-dish-proteins"></span>
-                        <p>Белки</p>
+                    <div class="modal-dish-products">
+                        <span>Продукты:</span>
+                        <div id="product-list"> </div>
                     </div>
-                    <div class="nutrition-item">
-                        <span id="modal-dish-fats"></span>
-                        <p>Жиры</p>
-                    </div>
-                    <div class="nutrition-item">
-                        <span id="modal-dish-carbs"></span>
-                        <p>Углеводы</p>
-                    </div>
-                </div>
-                <div class="nutrition-item"> <!-- Исправлено также здесь -->
-                    <h3>Рецепт</h3>
-                    <span id="modal-dish-recipe"></span>
-                </div>
+                </div>                
+            </div>
+            <div class="nutrition-item"> 
+                <h3>Рецепт</h3>
+                <span id="modal-dish-recipe"></span>
+                
             </div>
         </div>
         
@@ -153,9 +159,10 @@
         });
     }
 
-    function openDishModal(id, name, images, kcals, proteins, fats, carbs, recipes, type) {
+    function openDishModal(id, name, images, kcals, proteins, fats, carbs, recipes, ingredients, type) {
         if (type === 'created') {
-                document.getElementById('modal-dish-image').src = images.url; 
+                document.getElementById('modal-dish-image').src = '/media/' + images;
+                
             } else if (type === 'added') {
                 document.getElementById('modal-dish-image').src = images; // Если это добавленное блюдо
             }
@@ -166,6 +173,19 @@
         document.getElementById('modal-dish-carbs').textContent = carbs;
         document.getElementById('modal-dish-recipe').textContent = recipes;
 
+        // Обработка и вывод ингредиентов
+        const ingredientsArray = ingredients.split(', '); // Параметры для разделения ingredients
+        const productListContainer = document.getElementById('product-list');
+        productListContainer.innerHTML = ''; // Очищаем предыдущий список
+
+        ingredientsArray.forEach(ingredient => {
+            const ingredientItem = document.createElement('div');
+            ingredientItem.classList.add('product-item');
+
+            ingredientItem.textContent = ingredient; // Используем текст ингредиента
+            productListContainer.appendChild(ingredientItem);
+        });
+        
         const modal = document.getElementById('dishModal');
         modal.style.display = "block"; // Показываем модальное окно
     }

@@ -60,6 +60,8 @@
             <li onclick="filterByCategory('салаты')">Салаты</li>
             <li onclick="filterByCategory('каши')">Каши</li>
             <li onclick="filterByCategory('гарниры')">Гарниры</li>
+            <li onclick="filterByCategory('супы')">Супы</li>
+
         </ul>
         
     </div>
@@ -116,7 +118,7 @@
         document.getElementById('modal-dish-proteins').textContent = proteins;
         document.getElementById('modal-dish-fats').textContent = fats;
         document.getElementById('modal-dish-carbs').textContent = carbs;
-        document.getElementById('modal-dish-recipe').textContent = recipes;
+        document.getElementById('modal-dish-recipe').innerText = recipes;
 
         // Обработка и вывод ингредиентов
         const ingredientsArray = ingredients.split(', '); // Параметры для разделения ingredients

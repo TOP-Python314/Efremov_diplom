@@ -28,7 +28,7 @@ def dishes(request):
     
     for dish in dishes_list:
         dish.ingredients_list = ', '.join([f"{ingredient.product.name}: {ingredient.weight} гр." for ingredient in dish.ingredients.all()])
-        
+    
     return render(request, 'dishes.html', {
         'dishes': dishes_list
     })
@@ -78,6 +78,18 @@ def saved_dishes(request):
     added_dishes = [user_dish.dish for user_dish in user_dishes]
     created_dishes = models.UserCreatedDish.objects.filter(user=request.user)  # Получаем созданные блюда для текущего пользователя
     # Объединяем блюда и помечаем их тип
+    for dish in added_dishes:
+        dish.ingredients_list = ', '.join([
+            f"{ingredient.product.name}: {ingredient.weight} гр." 
+            for ingredient in dish.ingredients.all()
+        ])
+    
+    for created_dish in created_dishes:
+        created_dish.ingredients_list = ', '.join([
+            f"{user_created_dish_product.product.name}: {user_created_dish_product.weight} гр." 
+            for user_created_dish_product in models.UserCreatedDishProduct.objects.filter(dish=created_dish)
+        ])
+
     dishes = list(added_dishes) + list(created_dishes)
     for dish in dishes:
         dish.type = 'created' if isinstance(dish, models.UserCreatedDish) else 'added'
