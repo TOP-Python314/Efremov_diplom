@@ -5,12 +5,19 @@ body {
     color: #343a40;
 }
 
+/* Заголовки */
 h1 {
     text-align: center;
     margin-top: 20px;
     color: #007bff;
 }
 
+h2 {
+    margin-top: 30px;
+    color: #343a40;
+}
+
+/* Форма */
 form {
     max-width: 600px;
     margin: 20px auto;
@@ -30,6 +37,7 @@ label {
     margin-bottom: 5px;
 }
 
+/* Поля ввода */
 input[type="text"],
 input[type="file"],
 input[type="number"],
@@ -49,6 +57,7 @@ select:focus {
     border-color: #007bff;
 }
 
+/* Кнопки */
 button[type="submit"],
 button[type="button"] {
     background-color: #007bff;
@@ -66,11 +75,7 @@ button[type="button"]:hover {
     background-color: #0056b3;
 }
 
-h2 {
-    margin-top: 30px;
-    color: #343a40;
-}
-
+/* Ингредиенты */
 #ingredients {
     margin-top: 15px;
 }
@@ -86,6 +91,7 @@ h2 {
     width: 48%;
 }
 
+/* Ссылки */
 a {
     display: block;
     text-align: center;

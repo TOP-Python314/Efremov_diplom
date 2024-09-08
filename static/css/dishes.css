@@ -15,6 +15,7 @@ header {
 #main-content {
     display: flex;
     height: calc(100vh - 60px); /* Учитывая высоту header, скорректируйте 60px по мере необходимости */
+    flex-direction: column; /* Вертикальная ориентация для маленьких экранов */
 }
 
 /* Боковая панель категорий */
@@ -137,6 +138,7 @@ h2 {
     word-wrap: break-word; 
     margin: 10px 0; 
 }
+
 /* Кнопка закрытия модального окна */
 .close {
     color: #aaa; 
@@ -164,9 +166,11 @@ h2 {
     display: flex; /* Flexbox для группировки элементов */
     flex-direction: row; /* Вертикальное расположение */
 }
-.nutrition-items{
+
+.nutrition-items {
     display: flex;
 }
+
 .nutrition-item {
     margin: 10px; /* Отступы между элементами */
 }
@@ -180,7 +184,6 @@ h2 {
     font-weight: normal; /* Тонкий шрифт для названия */
     margin: 0; /* Убираем отступы */
 }
-
 
 /* Стиль для иконки плюса */
 .plus-icon {
@@ -236,6 +239,7 @@ h2 {
     background-color: #0056b3; /* Цвет фона при наведении */
 }
 
+/* Блок блюда */
 .dish-block {
     display: flex;
     border: 1px solid #ccc; /* Контур блока */
@@ -245,23 +249,26 @@ h2 {
     background-color: #f9f9f9; /* Фоновый цвет блока */
 }
 
+/* Форма блюда */
 .dish-form {
     display: flex; /* Для размещения элементов в ряд */
     width: 100%; /* Растягивание на максимальную ширину */
     cursor: pointer; /* Указатель при наведении */
 }
-.dish-details{
+
+.dish-details {
     margin-left: 30px;
 }
+
 .dish-image {
     max-width: 100%; /* Максимальная ширина изображения */
     height: auto; /* Автоматическая высота для пропорций */
 }
 
+/* Модальные продукты */
 .modal-dish-products {
     list-style-type: none; /* Убираем маркеры списка */
     margin: 10px; /* Убираем отступы */
-    
 }
 
 #product-list {
@@ -274,4 +281,45 @@ h2 {
 .product-item {
     display: flex; /* Делаем элементы продуктов флекс-элементами */
     justify-content: space-between; /* Распределяем продукты и их вес */
+}
+
+/* Медиа-запросы для адаптивности */
+@media (max-width: 1200px) {
+    #main-content {
+        flex-direction: column; /* Вертикальная ориентация для средних экранов */
+    }
+
+    .item-block, .dish-block {
+        flex-direction: column; /* Вертикальное размещение для маленьких экранов */
+    }
+
+    .item-details, .dish-form {
+        flex-direction: column; /* Вертикальное размещение внутри блока блюда */
+    }
+
+    .dish-details {
+        margin-left: 0; /* Убираем левый отступ для мобильных */
+        margin-top: 10px; /* Добавляем верхний отступ для мобильных */
+    }
+}
+
+@media (max-width: 768px) {
+    #category-sidebar {
+        width: 100%; /* Полная ширина для мобильных */
+        position: relative; /* Снимаем фиксированное положение */
+        height: auto; /* Убираем высоту */
+    }
+
+    .item-image {
+        width: 80px; /* Уменьшаем размер изображения для мобильных */
+    }
+
+    .item-details, .dish-block {
+        flex-direction: column; /* Стилю вертикально */
+        align-items: center; /* Центрируем элементы */
+    }
+
+    .ingredient input {
+        width: 100%; /* Полная ширина для мобильных */
+    }
 }
